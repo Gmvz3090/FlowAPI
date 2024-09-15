@@ -51,6 +51,11 @@ db.query('SELECT MAX(id) AS maxId FROM roomkeys', (error, results) => {
   console.log('Id initialized as : ' + id);
 });
 
+// ########### Admin Password Hashing
+
+var crypto = require('crypto');
+const adminpass = 'imnottellingyou';
+var adminpassword = crypto.createHash('sha256').update(adminpass).digest('hex');
 
 // ########### Accual API
 
@@ -58,13 +63,12 @@ db.query('SELECT MAX(id) AS maxId FROM roomkeys', (error, results) => {
 var express = require('express');
 var app = express();
 
-
-// ########### /api/croom endpoint
+// ########### /croom endpoint
 
 
 var crntroom = '';
 
-app.get('/api/croom',
+app.get('/croom',
     (req, res) => {
       crntroom = generateRandomString(10);
       time = Math.floor(Date.now());
@@ -85,10 +89,10 @@ app.get('/api/croom',
     });
 
 
-// ########### /api/join/?id endpoint
+// ########### /join/?id endpoint
 
 
-app.post('/api/join/:key', (req, res) => {
+app.post('/join/:key', (req, res) => {
   const { key } = req.params;
   const qr = 'SELECT COUNT(*) AS count FROM roomkeys WHERE roomkey = ?';
   db.query(qr, [key], (err, results) => {
@@ -108,3 +112,22 @@ app.post('/api/join/:key', (req, res) => {
   });
 });
 module.exports = app;
+
+
+// ########### /admin/login/?login endpoint
+
+
+app.get('/admin/login/:login' , (req, res) => {
+  var login = req.params.login;
+  var hash = crypto.createHash('sha256').update(login).digest('hex');
+  if (hash == adminpassword)
+  {
+    console.log('Logged in successfully');
+    res.status(200).send({Match: 'True'});
+  }
+  else
+  {
+    console.log('Hash did not match, tried hash : ' + hash);
+    res.status(300).send({Match: 'False'});
+  }
+})

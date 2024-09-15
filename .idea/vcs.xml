@@ -4,5 +4,8 @@
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/APIBogoban" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/BogobanAPI" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/untitled" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/untitled/APIBogoban" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/untitled/BogobanAPI" vcs="Git" />
   </component>
 </project>
